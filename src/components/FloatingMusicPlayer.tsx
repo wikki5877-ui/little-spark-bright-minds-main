@@ -49,6 +49,7 @@ export function FloatingMusicPlayer() {
     }
 
     let removed = false;
+    let detachInteractionListeners: (() => void) | null = null;
 
     const tryAutoStart = async () => {
       if (removed) return;
@@ -61,21 +62,25 @@ export function FloatingMusicPlayer() {
         const played = await attemptPlay();
 
         if (!played) return;
+        detachInteractionListeners?.();
+      };
 
+      detachInteractionListeners = () => {
         window.removeEventListener("pointerdown", startOnInteraction);
         window.removeEventListener("keydown", startOnInteraction);
         window.removeEventListener("touchstart", startOnInteraction);
       };
 
-      window.addEventListener("pointerdown", startOnInteraction, { once: true });
-      window.addEventListener("keydown", startOnInteraction, { once: true });
-      window.addEventListener("touchstart", startOnInteraction, { once: true });
+      window.addEventListener("pointerdown", startOnInteraction);
+      window.addEventListener("keydown", startOnInteraction);
+      window.addEventListener("touchstart", startOnInteraction);
     };
 
     void tryAutoStart();
 
     return () => {
       removed = true;
+      detachInteractionListeners?.();
     };
   }, []);
 

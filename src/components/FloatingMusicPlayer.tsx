@@ -2,7 +2,6 @@ import { motion } from "motion/react";
 import { Music2, Pause, Play, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const STORAGE_KEY = "yanush-music-enabled";
 const audioFiles = import.meta.glob("../../public/audio/*.{mp3,wav,ogg,m4a,aac}", {
   eager: true,
   query: "?url",
@@ -15,6 +14,7 @@ type AudioState = "idle" | "playing" | "paused" | "blocked" | "unavailable";
 export function FloatingMusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const unlockedRef = useRef(false);
+  const pausedByUserRef = useRef(false);
   const [audioState, setAudioState] = useState<AudioState>("idle");
   const [isEnabled, setIsEnabled] = useState(true);
 
@@ -43,21 +43,13 @@ export function FloatingMusicPlayer() {
   };
 
   useEffect(() => {
-    const savedPreference = window.localStorage.getItem(STORAGE_KEY);
-
-    if (savedPreference === "off") {
-      setIsEnabled(false);
-      setAudioState("paused");
-      return;
-    }
-
     let removed = false;
     let detachInteractionListeners: (() => void) | null = null;
 
     const startFromGesture = () => {
       const audio = audioRef.current;
 
-      if (!audio || !AUDIO_SRC || unlockedRef.current) return;
+      if (!audio || !AUDIO_SRC || unlockedRef.current || pausedByUserRef.current) return;
 
       audio.muted = false;
       audio.volume = 0.45;
@@ -115,12 +107,12 @@ export function FloatingMusicPlayer() {
       audio.pause();
       setAudioState("paused");
       setIsEnabled(false);
-      window.localStorage.setItem(STORAGE_KEY, "off");
+      pausedByUserRef.current = true;
       return;
     }
 
     setIsEnabled(true);
-    window.localStorage.setItem(STORAGE_KEY, "on");
+    pausedByUserRef.current = false;
     await attemptPlay();
   };
 

@@ -17,12 +17,10 @@ export function FloatingMusicPlayer() {
   const pausedByUserRef = useRef(false);
   const [audioState, setAudioState] = useState<AudioState>("idle");
   const [isEnabled, setIsEnabled] = useState(true);
-  const [showWelcomeOverlay, setShowWelcomeOverlay] = useState(Boolean(AUDIO_SRC));
 
   useEffect(() => {
     if (!AUDIO_SRC) {
       setAudioState("unavailable");
-      setShowWelcomeOverlay(false);
     }
   }, []);
 
@@ -37,7 +35,6 @@ export function FloatingMusicPlayer() {
       await audio.play();
       unlockedRef.current = true;
       setAudioState("playing");
-      setShowWelcomeOverlay(false);
       return true;
     } catch {
       setAudioState("blocked");
@@ -63,7 +60,6 @@ export function FloatingMusicPlayer() {
           if (removed) return;
           unlockedRef.current = true;
           setAudioState("playing");
-          setShowWelcomeOverlay(false);
           detachInteractionListeners?.();
         })
         .catch(() => {
@@ -74,16 +70,22 @@ export function FloatingMusicPlayer() {
 
     detachInteractionListeners = () => {
       document.removeEventListener("pointerdown", startFromGesture, true);
+      document.removeEventListener("mousedown", startFromGesture, true);
       document.removeEventListener("click", startFromGesture, true);
       document.removeEventListener("touchstart", startFromGesture, true);
+      document.removeEventListener("touchmove", startFromGesture, true);
       document.removeEventListener("touchend", startFromGesture, true);
+      document.removeEventListener("wheel", startFromGesture, true);
       document.removeEventListener("keydown", startFromGesture, true);
     };
 
     document.addEventListener("pointerdown", startFromGesture, true);
+    document.addEventListener("mousedown", startFromGesture, true);
     document.addEventListener("click", startFromGesture, true);
     document.addEventListener("touchstart", startFromGesture, true);
+    document.addEventListener("touchmove", startFromGesture, true);
     document.addEventListener("touchend", startFromGesture, true);
+    document.addEventListener("wheel", startFromGesture, true);
     document.addEventListener("keydown", startFromGesture, true);
 
     const tryAutoStart = async () => {
@@ -123,12 +125,6 @@ export function FloatingMusicPlayer() {
   const isPlaying = audioState === "playing";
   const isUnavailable = audioState === "unavailable";
 
-  const startWelcomePlayback = async () => {
-    pausedByUserRef.current = false;
-    setIsEnabled(true);
-    await attemptPlay();
-  };
-
   return (
     <>
       {AUDIO_SRC ? (
@@ -146,65 +142,6 @@ export function FloatingMusicPlayer() {
         />
       ) : null}
 
-      {showWelcomeOverlay && !isUnavailable ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 z-[95] flex items-center justify-center bg-[oklch(0.97_0.03_240_/_0.82)] px-4 backdrop-blur-md"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            className="paper-card w-full max-w-xl bg-white/96 p-7 text-center shadow-float"
-          >
-            <motion.div
-              animate={{ scale: [1, 1.08, 1], rotate: [0, 4, -4, 0] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-              className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-ribbon text-primary-foreground shadow-soft"
-            >
-              <Music2 size={34} />
-            </motion.div>
-
-            <p className="font-display text-4xl leading-tight text-foreground">
-              Увімкнути мелодію?
-            </p>
-            <p className="mt-3 font-hand text-lg leading-relaxed text-foreground/70">
-              Один дотик, і музика почне грати одразу після входу на сайт.
-            </p>
-
-            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={() => void startWelcomePlayback()}
-                className="inline-flex min-w-[220px] items-center justify-center rounded-full bg-gradient-ribbon px-6 py-3 font-bold text-primary-foreground shadow-soft transition-transform hover:scale-105"
-              >
-                <Play size={18} className="mr-2" />
-                Увімкнути мелодію
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  pausedByUserRef.current = true;
-                  setIsEnabled(false);
-                  setAudioState("paused");
-                  setShowWelcomeOverlay(false);
-                }}
-                className="inline-flex min-w-[220px] items-center justify-center rounded-full border border-[oklch(0.88_0.03_240)] bg-white px-6 py-3 font-bold text-foreground shadow-soft transition-transform hover:scale-105"
-              >
-                Відкрити без музики
-              </button>
-            </div>
-
-            {audioState === "blocked" ? (
-              <p className="mt-4 font-hand text-base text-[oklch(0.56_0.18_20)]">
-                Якщо звук не стартував, натисни кнопку ще раз.
-              </p>
-            ) : null}
-          </motion.div>
-        </motion.div>
-      ) : null}
-
       <div className="fixed bottom-5 right-5 z-[70] flex items-end gap-3">
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -216,9 +153,11 @@ export function FloatingMusicPlayer() {
               ? "додай мелодію у public/audio"
               : isPlaying
                 ? "мелодія грає"
-                : isEnabled
-                  ? "натисни, щоб увімкнути мелодію"
-                  : "мелодія вимкнена"}
+                : audioState === "blocked"
+                  ? "торкнись, свайпни або прокрути сторінку"
+                  : isEnabled
+                    ? "мелодія стартує від першого руху по сторінці"
+                    : "мелодія вимкнена"}
           </p>
         </motion.div>
 

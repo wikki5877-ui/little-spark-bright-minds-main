@@ -70,23 +70,29 @@ export function FloatingMusicPlayer() {
 
     detachInteractionListeners = () => {
       document.removeEventListener("pointerdown", startFromGesture, true);
+      document.removeEventListener("pointerup", startFromGesture, true);
       document.removeEventListener("mousedown", startFromGesture, true);
+      document.removeEventListener("mouseup", startFromGesture, true);
       document.removeEventListener("click", startFromGesture, true);
       document.removeEventListener("touchstart", startFromGesture, true);
       document.removeEventListener("touchmove", startFromGesture, true);
       document.removeEventListener("touchend", startFromGesture, true);
       document.removeEventListener("wheel", startFromGesture, true);
       document.removeEventListener("keydown", startFromGesture, true);
+      window.removeEventListener("scroll", startFromGesture, true);
     };
 
     document.addEventListener("pointerdown", startFromGesture, true);
+    document.addEventListener("pointerup", startFromGesture, true);
     document.addEventListener("mousedown", startFromGesture, true);
+    document.addEventListener("mouseup", startFromGesture, true);
     document.addEventListener("click", startFromGesture, true);
     document.addEventListener("touchstart", startFromGesture, true);
     document.addEventListener("touchmove", startFromGesture, true);
     document.addEventListener("touchend", startFromGesture, true);
     document.addEventListener("wheel", startFromGesture, true);
     document.addEventListener("keydown", startFromGesture, true);
+    window.addEventListener("scroll", startFromGesture, true);
 
     const tryAutoStart = async () => {
       if (removed) return;

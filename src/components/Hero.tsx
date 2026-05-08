@@ -1,11 +1,15 @@
 import { motion } from "motion/react";
+import { useState } from "react";
 import iconHeart from "@/assets/icon-heart.png";
 import iconBulb from "@/assets/icon-bulb.png";
+import nataliiaPortrait from "@/assets/nataliia-portrait.webp";
 
 const heroBgVideo = "/videos/hero-bg.mp4";
 const heroVideo = "/videos/hero-teacher.mp4";
 
 export function Hero() {
+  const [heroVideoFailed, setHeroVideoFailed] = useState(false);
+
   return (
     <section className="relative min-h-screen overflow-hidden bg-gradient-warm pt-20 md:pt-8 pb-20">
       {/* background cartoon animation */}
@@ -15,7 +19,8 @@ export function Hero() {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-60"
+        preload="metadata"
+        className="absolute inset-0 hidden h-full w-full object-cover opacity-60 md:block"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.96_0.04_85)]/70 via-[oklch(0.96_0.04_85)]/40 to-[oklch(0.96_0.04_85)]/90" />
       {/* floating decor */}
@@ -159,14 +164,27 @@ export function Hero() {
           >
             <div className="absolute -inset-6 bg-gradient-ribbon rounded-[3rem] blur-2xl opacity-30" />
             <div className="relative rounded-[2.5rem] overflow-hidden shadow-float border-4 border-white aspect-square bg-white">
-              <video
-                src={heroVideo}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover"
-              />
+              {heroVideoFailed ? (
+                <img
+                  src={nataliiaPortrait}
+                  alt="Наталія"
+                  loading="eager"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <video
+                  src={heroVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  poster={nataliiaPortrait}
+                  disablePictureInPicture
+                  onError={() => setHeroVideoFailed(true)}
+                  className="h-full w-full object-cover"
+                />
+              )}
               <div className="absolute inset-0 ring-1 ring-inset ring-white/40 rounded-[2.5rem] pointer-events-none" />
             </div>
             {/* sticker */}

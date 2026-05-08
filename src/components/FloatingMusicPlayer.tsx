@@ -2,8 +2,13 @@ import { motion } from "motion/react";
 import { Music2, Pause, Play, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const AUDIO_SRC = "/audio/site-theme.mp3";
 const STORAGE_KEY = "yanush-music-enabled";
+const audioFiles = import.meta.glob("../../public/audio/*.{mp3,wav,ogg,m4a,aac}", {
+  eager: true,
+  query: "?url",
+  import: "default",
+}) as Record<string, string>;
+const AUDIO_SRC = Object.values(audioFiles)[0] ?? null;
 
 type AudioState = "idle" | "playing" | "paused" | "blocked" | "unavailable";
 
@@ -12,10 +17,16 @@ export function FloatingMusicPlayer() {
   const [audioState, setAudioState] = useState<AudioState>("idle");
   const [isEnabled, setIsEnabled] = useState(true);
 
+  useEffect(() => {
+    if (!AUDIO_SRC) {
+      setAudioState("unavailable");
+    }
+  }, []);
+
   const attemptPlay = async () => {
     const audio = audioRef.current;
 
-    if (!audio) return false;
+    if (!audio || !AUDIO_SRC) return false;
 
     try {
       audio.muted = false;
@@ -91,16 +102,20 @@ export function FloatingMusicPlayer() {
 
   return (
     <>
-      <audio
-        ref={audioRef}
-        src={AUDIO_SRC}
-        preload="auto"
-        loop
-        playsInline
-        onPlay={() => setAudioState("playing")}
-        onPause={() => setAudioState((current) => (current === "unavailable" ? current : "paused"))}
-        onError={() => setAudioState("unavailable")}
-      />
+      {AUDIO_SRC ? (
+        <audio
+          ref={audioRef}
+          src={AUDIO_SRC}
+          preload="auto"
+          loop
+          playsInline
+          onPlay={() => setAudioState("playing")}
+          onPause={() =>
+            setAudioState((current) => (current === "unavailable" ? current : "paused"))
+          }
+          onError={() => setAudioState("unavailable")}
+        />
+      ) : null}
 
       <div className="fixed bottom-5 right-5 z-[70] flex items-end gap-3">
         <motion.div
@@ -110,7 +125,7 @@ export function FloatingMusicPlayer() {
         >
           <p className="font-hand text-sm text-foreground/75">
             {isUnavailable
-              ? "додай мелодію у public/audio/site-theme.mp3"
+              ? "додай мелодію у public/audio"
               : isPlaying
                 ? "мелодія грає"
                 : isEnabled

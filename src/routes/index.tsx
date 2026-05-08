@@ -12,6 +12,7 @@ import { Faq } from "@/components/Faq";
 import { Testimonials } from "@/components/Testimonials";
 import { ParentVideoTestimonials } from "@/components/ParentVideoTestimonials";
 import { BookingForm } from "@/components/BookingForm";
+import { FloatingMusicPlayer } from "@/components/FloatingMusicPlayer";
 import { WaveDivider } from "@/components/WaveDivider";
 import { VideoGallery } from "@/components/VideoGallery";
 import bgPattern from "@/assets/bg-pattern.jpg";
@@ -158,6 +159,7 @@ function Index() {
       }}
     >
       <Preloader />
+      <FloatingMusicPlayer />
       <NavBar />
       {/* Floating parallax decor */}
       <motion.div

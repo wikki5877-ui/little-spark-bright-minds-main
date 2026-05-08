@@ -17,7 +17,14 @@ const accentMap = {
   sun: "from-[oklch(0.96_0.06_90)] to-[oklch(0.9_0.12_85)]",
 };
 
-export function FloatingBlock({ title, icon, items, accent = "sky", delay = 0, className = "" }: Props) {
+export function FloatingBlock({
+  title,
+  icon,
+  items,
+  accent = "sky",
+  delay = 0,
+  className = "",
+}: Props) {
   const [open, setOpen] = useState(false);
   return (
     <motion.div
@@ -34,9 +41,20 @@ export function FloatingBlock({ title, icon, items, accent = "sky", delay = 0, c
         className={`relative w-full text-left paper-card shadow-card bg-gradient-to-br ${accentMap[accent]} p-5 md:p-6 cursor-pointer group overflow-hidden`}
       >
         <div className="flex items-center gap-3">
-          <img src={icon} alt="" width={56} height={56} className="w-12 h-12 md:w-14 md:h-14 object-contain drop-shadow-md animate-float" loading="lazy" />
-          <h3 className="font-display text-2xl md:text-3xl text-foreground leading-none">{title}</h3>
-          <span className="ml-auto text-primary text-2xl font-display select-none">{open ? "−" : "+"}</span>
+          <img
+            src={icon}
+            alt=""
+            width={56}
+            height={56}
+            className="w-12 h-12 md:w-14 md:h-14 object-contain drop-shadow-md animate-float"
+            loading="lazy"
+          />
+          <h3 className="font-display text-2xl md:text-3xl text-foreground leading-none">
+            {title}
+          </h3>
+          <span className="ml-auto text-primary text-2xl font-display select-none">
+            {open ? "−" : "+"}
+          </span>
         </div>
         <motion.div
           initial={false}
@@ -54,7 +72,9 @@ export function FloatingBlock({ title, icon, items, accent = "sky", delay = 0, c
           </ul>
         </motion.div>
         {!open && (
-          <p className="font-hand text-sm text-foreground/60 mt-2 italic">натисни, щоб відкрити ✨</p>
+          <p className="font-hand text-sm text-foreground/60 mt-2 italic">
+            натисни, щоб відкрити ✨
+          </p>
         )}
       </motion.button>
     </motion.div>

@@ -19,8 +19,18 @@ export function Hero() {
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.96_0.04_85)]/70 via-[oklch(0.96_0.04_85)]/40 to-[oklch(0.96_0.04_85)]/90" />
       {/* floating decor */}
-      <img src={iconHeart} alt="" className="absolute top-20 left-[6%] w-8 md:w-12 opacity-70 animate-drift" loading="lazy" />
-      <img src={iconBulb} alt="" className="absolute top-40 right-[6%] w-10 md:w-14 opacity-80 animate-float" loading="lazy" />
+      <img
+        src={iconHeart}
+        alt=""
+        className="absolute top-20 left-[6%] w-8 md:w-12 opacity-70 animate-drift"
+        loading="lazy"
+      />
+      <img
+        src={iconBulb}
+        alt=""
+        className="absolute top-40 right-[6%] w-10 md:w-14 opacity-80 animate-float"
+        loading="lazy"
+      />
       <div className="absolute -top-10 right-1/3 w-32 h-32 rounded-full bg-[oklch(0.9_0.1_240)] blur-3xl opacity-60" />
       <div className="absolute bottom-20 left-1/4 w-40 h-40 rounded-full bg-[oklch(0.92_0.1_85)] blur-3xl opacity-50" />
 
@@ -125,10 +135,16 @@ export function Hero() {
               transition={{ delay: 0.9 }}
               className="mt-10 flex flex-wrap gap-4 justify-center lg:justify-start"
             >
-              <a href="#services" className="px-6 md:px-8 py-3 md:py-4 rounded-full bg-gradient-ribbon text-primary-foreground font-bold text-sm md:text-base shadow-soft hover:scale-105 transition-transform">
+              <a
+                href="#services"
+                className="px-6 md:px-8 py-3 md:py-4 rounded-full bg-gradient-ribbon text-primary-foreground font-bold text-sm md:text-base shadow-soft hover:scale-105 transition-transform"
+              >
                 Наші напрямки
               </a>
-              <a href="#contact" className="px-6 md:px-8 py-3 md:py-4 rounded-full bg-white/80 backdrop-blur text-foreground font-bold text-sm md:text-base border-2 border-primary/20 hover:border-primary transition-colors">
+              <a
+                href="#contact"
+                className="px-6 md:px-8 py-3 md:py-4 rounded-full bg-white/80 backdrop-blur text-foreground font-bold text-sm md:text-base border-2 border-primary/20 hover:border-primary transition-colors"
+              >
                 Зв'язатись 💌
               </a>
             </motion.div>

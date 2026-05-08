@@ -10,6 +10,8 @@ const links = [
   { id: "price", label: "Вартість" },
   { id: "certificates", label: "Дипломи" },
   { id: "reviews", label: "Відгуки" },
+  { id: "video-reviews", label: "Відео-відгуки" },
+  { id: "videos", label: "Відео" },
   { id: "faq", label: "FAQ" },
   { id: "contact", label: "Контакт" },
 ];
@@ -48,7 +50,10 @@ export function NavBar() {
       >
         <motion.a
           href="#about"
-          onClick={(e) => { e.preventDefault(); go("about"); }}
+          onClick={(e) => {
+            e.preventDefault();
+            go("about");
+          }}
           whileHover={{ scale: 1.08, rotate: -4 }}
           whileTap={{ scale: 0.95 }}
           className="flex items-center gap-2 pl-1 pr-4 py-1 rounded-full bg-white/85 backdrop-blur-md shadow-soft border border-white"
@@ -56,33 +61,38 @@ export function NavBar() {
           <YanushAvatar />
           <YanushWordmark className="text-2xl" />
         </motion.a>
-        <div className="flex items-center gap-1 px-3 py-2 rounded-full bg-white/80 backdrop-blur-md shadow-soft border border-white">
-          <span className="px-3 font-display text-xl text-primary">Наталія 💛</span>
-        {links.map((l) => (
-          <button
-            key={l.id}
-            onClick={() => go(l.id)}
-            className={`relative px-3 py-1.5 rounded-full font-hand text-sm transition-colors ${
-              active === l.id ? "text-primary-foreground" : "text-foreground/70 hover:text-foreground"
-            }`}
-          >
-            {active === l.id && (
-              <motion.span
-                layoutId="nav-pill"
-                className="absolute inset-0 rounded-full bg-gradient-ribbon -z-0"
-                transition={{ type: "spring", damping: 22, stiffness: 260 }}
-              />
-            )}
-            <span className="relative z-10">{l.label}</span>
-          </button>
-        ))}
+        <div className="flex items-center gap-0.5 px-2 py-2 rounded-full bg-white/80 backdrop-blur-md shadow-soft border border-white max-w-[min(100vw-220px,1280px)] overflow-x-auto">
+          <span className="px-2.5 font-display text-lg text-primary shrink-0">Наталія 💛</span>
+          {links.map((l) => (
+            <button
+              key={l.id}
+              onClick={() => go(l.id)}
+              className={`relative shrink-0 px-2.5 py-1.5 rounded-full font-hand text-[13px] transition-colors ${
+                active === l.id
+                  ? "text-primary-foreground"
+                  : "text-foreground/70 hover:text-foreground"
+              }`}
+            >
+              {active === l.id && (
+                <motion.span
+                  layoutId="nav-pill"
+                  className="absolute inset-0 rounded-full bg-gradient-ribbon -z-0"
+                  transition={{ type: "spring", damping: 22, stiffness: 260 }}
+                />
+              )}
+              <span className="relative z-10">{l.label}</span>
+            </button>
+          ))}
         </div>
       </motion.nav>
 
       {/* Mobile floating logo */}
       <motion.a
         href="#about"
-        onClick={(e) => { e.preventDefault(); go("about"); }}
+        onClick={(e) => {
+          e.preventDefault();
+          go("about");
+        }}
         whileTap={{ scale: 0.92 }}
         className="fixed top-3 left-3 z-50 md:hidden flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-white/85 backdrop-blur-md shadow-soft border border-white"
       >
@@ -96,9 +106,18 @@ export function NavBar() {
         aria-label="Меню"
         className="fixed top-3 right-3 z-50 md:hidden h-12 w-12 rounded-full bg-white/90 backdrop-blur-md shadow-soft border border-white flex flex-col items-center justify-center gap-1.5"
       >
-        <motion.span animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 6 : 0 }} className="block h-[2px] w-6 bg-foreground rounded-full" />
-        <motion.span animate={{ opacity: menuOpen ? 0 : 1 }} className="block h-[2px] w-6 bg-foreground rounded-full" />
-        <motion.span animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -6 : 0 }} className="block h-[2px] w-6 bg-foreground rounded-full" />
+        <motion.span
+          animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 6 : 0 }}
+          className="block h-[2px] w-6 bg-foreground rounded-full"
+        />
+        <motion.span
+          animate={{ opacity: menuOpen ? 0 : 1 }}
+          className="block h-[2px] w-6 bg-foreground rounded-full"
+        />
+        <motion.span
+          animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -6 : 0 }}
+          className="block h-[2px] w-6 bg-foreground rounded-full"
+        />
       </button>
 
       {/* Mobile menu drawer */}
@@ -125,7 +144,9 @@ export function NavBar() {
                     key={l.id}
                     onClick={() => go(l.id)}
                     className={`text-left font-display text-xl px-4 py-3 rounded-2xl transition-colors ${
-                      active === l.id ? "bg-gradient-ribbon text-primary-foreground" : "text-foreground hover:bg-muted"
+                      active === l.id
+                        ? "bg-gradient-ribbon text-primary-foreground"
+                        : "text-foreground hover:bg-muted"
                     }`}
                   >
                     {l.label}

@@ -1,11 +1,36 @@
 import { motion } from "motion/react";
 
 const steps = [
-  { n: "01", emoji: "📞", title: "Знайомство", text: "Спілкуємось, обговорюємо потреби дитини та сім'ї." },
-  { n: "02", emoji: "🔍", title: "Діагностика", text: "Визначаємо сильні сторони, складнощі та цілі розвитку." },
-  { n: "03", emoji: "🎯", title: "Програма", text: "Складаю індивідуальний план занять — терапія, ігри, вправи." },
-  { n: "04", emoji: "🌱", title: "Заняття", text: "Регулярна робота: терапія, підтримка, маленькі перемоги." },
-  { n: "05", emoji: "💌", title: "Звіт батькам", text: "Розповідаю про прогрес, даю поради для дому." },
+  {
+    n: "01",
+    emoji: "📞",
+    title: "Знайомство",
+    text: "Спілкуємось, обговорюємо потреби дитини та сім'ї.",
+  },
+  {
+    n: "02",
+    emoji: "🔍",
+    title: "Діагностика",
+    text: "Визначаємо сильні сторони, складнощі та цілі розвитку.",
+  },
+  {
+    n: "03",
+    emoji: "🎯",
+    title: "Програма",
+    text: "Складаю індивідуальний план занять — терапія, ігри, вправи.",
+  },
+  {
+    n: "04",
+    emoji: "🌱",
+    title: "Заняття",
+    text: "Регулярна робота: терапія, підтримка, маленькі перемоги.",
+  },
+  {
+    n: "05",
+    emoji: "💌",
+    title: "Звіт батькам",
+    text: "Розповідаю про прогрес, даю поради для дому.",
+  },
 ];
 
 export function HowItWorks() {
@@ -18,9 +43,15 @@ export function HowItWorks() {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <span className="ribbon inline-block px-5 py-1.5 font-hand text-sm mb-4">5 простих кроків 🌟</span>
-          <h2 className="font-display text-4xl md:text-6xl text-foreground">Як проходить наша робота</h2>
-          <p className="font-hand text-xl text-foreground/60 mt-3">від першого дзвінка — до перших успіхів</p>
+          <span className="ribbon inline-block px-5 py-1.5 font-hand text-sm mb-4">
+            5 простих кроків 🌟
+          </span>
+          <h2 className="font-display text-4xl md:text-6xl text-foreground">
+            Як проходить наша робота
+          </h2>
+          <p className="font-hand text-xl text-foreground/60 mt-3">
+            від першого дзвінка — до перших успіхів
+          </p>
         </motion.div>
 
         <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-5">

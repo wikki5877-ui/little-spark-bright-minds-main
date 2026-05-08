@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+import logoIcon from "@/assets/logo-yanush.png";
 
 function NotFoundComponent() {
   return (
@@ -30,23 +31,39 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Kindred Minds Studio is a website for a child psychologist and teacher, featuring engaging visuals and interactive elements." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Kindred Minds Studio is a website for a child psychologist and teacher, featuring engaging visuals and interactive elements." },
+      { title: "Наталія Кривенченко · дитячий психолог" },
+      {
+        name: "description",
+        content:
+          "Дитячий психолог Наталія Кривенченко: підтримка дітей з особливими потребами, терапія, розвиток, робота з батьками та курси для нянь.",
+      },
+      { name: "author", content: "Наталія Кривенченко" },
+      { name: "theme-color", content: "#38bdf8" },
+      { property: "og:title", content: "Наталія Кривенченко · дитячий психолог" },
+      {
+        property: "og:description",
+        content:
+          "Психологічний супровід, терапія та розвиток дітей з особливими потребами у Дніпрі.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "Kindred Minds Studio is a website for a child psychologist and teacher, featuring engaging visuals and interactive elements." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0b330017-9a74-41d2-87f2-c61ec6d8719d/id-preview-a6d9e17c--e7bb8c73-de73-4db0-80da-976f0b001c5a.lovable.app-1777742228409.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0b330017-9a74-41d2-87f2-c61ec6d8719d/id-preview-a6d9e17c--e7bb8c73-de73-4db0-80da-976f0b001c5a.lovable.app-1777742228409.png" },
+      { name: "twitter:title", content: "Наталія Кривенченко · дитячий психолог" },
+      {
+        name: "twitter:description",
+        content: "Підтримка, терапія та розвиток дітей з особливими потребами.",
+      },
+      { property: "og:image", content: logoIcon },
+      { name: "twitter:image", content: logoIcon },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        href: logoIcon,
       },
     ],
   }),
@@ -57,7 +74,7 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="uk">
       <head>
         <HeadContent />
       </head>

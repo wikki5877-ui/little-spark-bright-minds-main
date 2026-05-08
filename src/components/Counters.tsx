@@ -2,10 +2,10 @@ import { motion, useInView, useMotionValue, useTransform, animate } from "motion
 import { useEffect, useRef } from "react";
 
 const stats = [
-  { value: 8, suffix: "+", label: "років досвіду", emoji: "⏳" },
+  { value: 6, suffix: "", label: "років досвіду", emoji: "⏳" },
   { value: 150, suffix: "+", label: "особливих дітей", emoji: "👶" },
   { value: 7, suffix: "", label: "напрямків терапії", emoji: "🌈" },
-  { value: 12, suffix: "", label: "сертифікатів", emoji: "🎓" },
+  { value: 8, suffix: "", label: "сертифікатів", emoji: "🎓" },
 ];
 
 function Counter({ to, suffix }: { to: number; suffix: string }) {

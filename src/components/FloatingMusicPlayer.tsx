@@ -14,6 +14,7 @@ type AudioState = "idle" | "playing" | "paused" | "blocked" | "unavailable";
 
 export function FloatingMusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const unlockedRef = useRef(false);
   const [audioState, setAudioState] = useState<AudioState>("idle");
   const [isEnabled, setIsEnabled] = useState(true);
 
@@ -30,7 +31,9 @@ export function FloatingMusicPlayer() {
 
     try {
       audio.muted = false;
+      audio.volume = 0.45;
       await audio.play();
+      unlockedRef.current = true;
       setAudioState("playing");
       return true;
     } catch {
@@ -51,29 +54,48 @@ export function FloatingMusicPlayer() {
     let removed = false;
     let detachInteractionListeners: (() => void) | null = null;
 
+    const startFromGesture = () => {
+      const audio = audioRef.current;
+
+      if (!audio || !AUDIO_SRC || unlockedRef.current) return;
+
+      audio.muted = false;
+      audio.volume = 0.45;
+
+      void audio
+        .play()
+        .then(() => {
+          if (removed) return;
+          unlockedRef.current = true;
+          setAudioState("playing");
+          detachInteractionListeners?.();
+        })
+        .catch(() => {
+          if (removed) return;
+          setAudioState("blocked");
+        });
+    };
+
+    detachInteractionListeners = () => {
+      document.removeEventListener("pointerdown", startFromGesture, true);
+      document.removeEventListener("click", startFromGesture, true);
+      document.removeEventListener("touchstart", startFromGesture, true);
+      document.removeEventListener("touchend", startFromGesture, true);
+      document.removeEventListener("keydown", startFromGesture, true);
+    };
+
+    document.addEventListener("pointerdown", startFromGesture, true);
+    document.addEventListener("click", startFromGesture, true);
+    document.addEventListener("touchstart", startFromGesture, true);
+    document.addEventListener("touchend", startFromGesture, true);
+    document.addEventListener("keydown", startFromGesture, true);
+
     const tryAutoStart = async () => {
       if (removed) return;
 
       const started = await attemptPlay();
 
       if (started) return;
-
-      const startOnInteraction = async () => {
-        const played = await attemptPlay();
-
-        if (!played) return;
-        detachInteractionListeners?.();
-      };
-
-      detachInteractionListeners = () => {
-        window.removeEventListener("pointerdown", startOnInteraction);
-        window.removeEventListener("keydown", startOnInteraction);
-        window.removeEventListener("touchstart", startOnInteraction);
-      };
-
-      window.addEventListener("pointerdown", startOnInteraction);
-      window.addEventListener("keydown", startOnInteraction);
-      window.addEventListener("touchstart", startOnInteraction);
     };
 
     void tryAutoStart();

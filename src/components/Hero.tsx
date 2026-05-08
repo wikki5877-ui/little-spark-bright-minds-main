@@ -1,26 +1,70 @@
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import iconHeart from "@/assets/icon-heart.png";
 import iconBulb from "@/assets/icon-bulb.png";
-import nataliiaPortrait from "@/assets/nataliia-portrait.webp";
 
 const heroBgVideo = "/videos/hero-bg.mp4";
 const heroVideo = "/videos/hero-teacher.mp4";
 
 export function Hero() {
-  const [heroVideoFailed, setHeroVideoFailed] = useState(false);
+  const bgVideoRef = useRef<HTMLVideoElement | null>(null);
+  const heroVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    let removed = false;
+
+    const playHeroVideos = () => {
+      if (removed) return;
+
+      for (const video of [bgVideoRef.current, heroVideoRef.current]) {
+        if (!video) continue;
+
+        video.muted = true;
+        void video.play().catch(() => {});
+      }
+    };
+
+    const detachListeners = () => {
+      window.removeEventListener("pointerdown", playHeroVideos, true);
+      window.removeEventListener("pointerup", playHeroVideos, true);
+      window.removeEventListener("touchstart", playHeroVideos, true);
+      window.removeEventListener("touchmove", playHeroVideos, true);
+      window.removeEventListener("scroll", playHeroVideos, true);
+      window.removeEventListener("click", playHeroVideos, true);
+    };
+
+    playHeroVideos();
+    const retryId = window.setTimeout(playHeroVideos, 450);
+
+    window.addEventListener("pointerdown", playHeroVideos, true);
+    window.addEventListener("pointerup", playHeroVideos, true);
+    window.addEventListener("touchstart", playHeroVideos, true);
+    window.addEventListener("touchmove", playHeroVideos, true);
+    window.addEventListener("scroll", playHeroVideos, true);
+    window.addEventListener("click", playHeroVideos, true);
+
+    return () => {
+      removed = true;
+      window.clearTimeout(retryId);
+      detachListeners();
+    };
+  }, []);
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-gradient-warm pt-20 md:pt-8 pb-20">
       {/* background cartoon animation */}
       <video
+        ref={bgVideoRef}
         src={heroBgVideo}
         autoPlay
         loop
         muted
         playsInline
         preload="metadata"
-        className="absolute inset-0 hidden h-full w-full object-cover opacity-60 md:block"
+        onLoadedData={() => {
+          void bgVideoRef.current?.play().catch(() => {});
+        }}
+        className="absolute inset-0 h-full w-full object-cover opacity-60"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.96_0.04_85)]/70 via-[oklch(0.96_0.04_85)]/40 to-[oklch(0.96_0.04_85)]/90" />
       {/* floating decor */}
@@ -164,27 +208,20 @@ export function Hero() {
           >
             <div className="absolute -inset-6 bg-gradient-ribbon rounded-[3rem] blur-2xl opacity-30" />
             <div className="relative rounded-[2.5rem] overflow-hidden shadow-float border-4 border-white aspect-square bg-white">
-              {heroVideoFailed ? (
-                <img
-                  src={nataliiaPortrait}
-                  alt="Наталія"
-                  loading="eager"
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <video
-                  src={heroVideo}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                  poster={nataliiaPortrait}
-                  disablePictureInPicture
-                  onError={() => setHeroVideoFailed(true)}
-                  className="h-full w-full object-cover"
-                />
-              )}
+              <video
+                ref={heroVideoRef}
+                src={heroVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                disablePictureInPicture
+                onLoadedData={() => {
+                  void heroVideoRef.current?.play().catch(() => {});
+                }}
+                className="h-full w-full object-cover"
+              />
               <div className="absolute inset-0 ring-1 ring-inset ring-white/40 rounded-[2.5rem] pointer-events-none" />
             </div>
             {/* sticker */}
